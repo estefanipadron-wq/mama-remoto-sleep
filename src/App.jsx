@@ -525,7 +525,7 @@ export default function SleepTracker() {
         <div style={{ background:isDayMode?"#fff8f2":"rgba(196,144,124,0.08)", border:`1px solid ${isDayMode?"#e8c8b0":"rgba(196,144,124,0.2)"}`, borderRadius:"16px", padding:"16px 18px", textAlign:"center" }}>
           <div style={{ fontSize:"11px", color:theme.textMuted, marginBottom:"4px" }}>{t.freeTag} <strong style={{ color:"#C4907C" }}>Mamá Remoto</strong></div>
           <div style={{ fontSize:"13px", color:theme.textSoft, marginBottom:"12px", fontStyle:"italic" }}>{t.guidePromo}</div>
-          <a href="https://mamaremoto.com/babysleeptracker" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", background:"#C4907C", color:"#fff", padding:"10px 20px", borderRadius:"50px", fontSize:"13px", fontFamily:"Georgia, serif", textDecoration:"none", fontWeight:"700", letterSpacing:"0.04em", boxShadow:isDayMode?"0 3px 10px rgba(196,144,124,0.4)":"none" }}>
+          <a href="https://preview.mailerlite.io/forms/2298067/187207923189941551/share" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", background:"#C4907C", color:"#fff", padding:"10px 20px", borderRadius:"50px", fontSize:"13px", fontFamily:"Georgia, serif", textDecoration:"none", fontWeight:"700", letterSpacing:"0.04em", boxShadow:isDayMode?"0 3px 10px rgba(196,144,124,0.4)":"none" }}>
             {t.guideBtn}
           </a>
         </div>
