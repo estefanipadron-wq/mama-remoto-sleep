@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-
+useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://groot.mailerlite.com/js/w/webforms.min.js?v300817d369c4f0f5d15a6a7d8a655760";
+  script.async = true;
+  document.body.appendChild(script);
+  return () => document.body.removeChild(script);
+}, []);
 // ─── TRANSLATIONS ───────────────────────────────────────────────────────────
 const T = {
   en: {
@@ -521,14 +527,17 @@ export default function SleepTracker() {
           <div style={{ fontSize:"11px", color:theme.textMuted, marginTop:"8px" }}>{completedCount} of 21 {t.nightsLogged}</div>
         </div>
 
-        {/* Mama Remoto promo */}
-        <div style={{ background:isDayMode?"#fff8f2":"rgba(196,144,124,0.08)", border:`1px solid ${isDayMode?"#e8c8b0":"rgba(196,144,124,0.2)"}`, borderRadius:"16px", padding:"16px 18px", textAlign:"center" }}>
-          <div style={{ fontSize:"11px", color:theme.textMuted, marginBottom:"4px" }}>{t.freeTag} <strong style={{ color:"#C4907C" }}>Mamá Remoto</strong></div>
-          <div style={{ fontSize:"13px", color:theme.textSoft, marginBottom:"12px", fontStyle:"italic" }}>{t.guidePromo}</div>
-          <a href="https://preview.mailerlite.io/forms/2298067/187207923189941551/share" target="_blank" rel="noopener noreferrer" style={{ display:"inline-block", background:"#C4907C", color:"#fff", padding:"10px 20px", borderRadius:"50px", fontSize:"13px", fontFamily:"Georgia, serif", textDecoration:"none", fontWeight:"700", letterSpacing:"0.04em", boxShadow:isDayMode?"0 3px 10px rgba(196,144,124,0.4)":"none" }}>
-            {t.guideBtn}
-          </a>
-        </div>
+{/* Mama Remoto promo */}
+<div style={{ background:isDayMode?"#fff8f2":"rgba(196,144,124,0.08)", border:`1px solid ${isDayMode?"#e8c8b0":"rgba(196,144,124,0.2)"}`, borderRadius:"16px", padding:"16px 18px", textAlign:"center" }}>
+  <div style={{ fontSize:"11px", color:theme.textMuted, marginBottom:"4px" }}>{t.freeTag} <strong style={{ color:"#C4907C" }}>Mamá Remoto</strong></div>
+  <div style={{ fontSize:"15px", fontFamily:"Georgia, serif", fontWeight:"600", color:"#C4907C", marginBottom:"4px" }}>
+    🌙 The Sleep Guide is coming
+  </div>
+  <div style={{ fontSize:"12px", color:theme.textMuted, marginBottom:"14px" }}>
+    Join the waitlist — early access + launch discount
+  </div>
+  <div className="ml-embedded" data-form="Nq1INH" />
+</div>
 
       </div>
     </div>
