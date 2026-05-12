@@ -244,15 +244,25 @@ export default function SleepTracker() {
   const [logData, setLogData]       = useState(loadStorage);
 
   // ─── MailerLite universal script ────────────────────────────────────────────
-  useEffect(() => {
-    if (window.ml) return; // don't load twice
+useEffect(() => {
+  const initML = () => {
+    if (window.ml) {
+      window.ml("account", "2298067");
+      return;
+    }
     const script = document.createElement("script");
     script.src = "https://assets.mailerlite.com/js/universal.js";
     script.async = true;
-    script.onload = () => window.ml && window.ml("account", "2298067");
+    script.onload = () => {
+      window.ml && window.ml("account", "2298067");
+    };
     document.body.appendChild(script);
-    return () => document.body.removeChild(script);
-  }, []);
+  };
+
+  // Small delay to ensure the DOM element is rendered
+  const timer = setTimeout(initML, 500);
+  return () => clearTimeout(timer);
+}, []);
 
   const t      = T[lang];
   const weeks  = WEEKS_DATA[lang];
