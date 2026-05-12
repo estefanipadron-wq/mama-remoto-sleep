@@ -530,7 +530,7 @@ export default function SleepTracker() {
           <div style={{ fontSize:"12px", color:theme.textMuted, marginBottom:"14px" }}>
             Join the waitlist — early access + launch discount
           </div>
-          <div className="ml-embedded" data-form="Nq1INH" />
+          <div className="ml-embedded" data-form="Nq1INH"></div>
         </div>
 
       </div>
