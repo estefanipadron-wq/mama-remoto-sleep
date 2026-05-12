@@ -242,15 +242,6 @@ export default function SleepTracker() {
   const [activeTab, setActiveTab]   = useState(0);
   const [babyMonth, setBabyMonth]   = useState(5);
   const [logData, setLogData]       = useState(loadStorage);
-
-  // ─── MailerLite universal script ────────────────────────────────────────────
-
-
-  // Small delay to ensure the DOM element is rendered
-  const timer = setTimeout(initML, 500);
-  return () => clearTimeout(timer);
-}, []);
-
   const t      = T[lang];
   const weeks  = WEEKS_DATA[lang];
   const week   = weeks[activeWeek];
