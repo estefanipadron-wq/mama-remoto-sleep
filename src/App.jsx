@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://groot.mailerlite.com/js/w/webforms.min.js?v300817d369c4f0f5d15a6a7d8a655760";
-  script.async = true;
-  document.body.appendChild(script);
-  return () => document.body.removeChild(script);
-}, []);
+
 // ─── TRANSLATIONS ───────────────────────────────────────────────────────────
 const T = {
   en: {
@@ -241,13 +235,24 @@ function saveStorage(data) {
 }
 
 export default function SleepTracker() {
-  const [lang, setLang]           = useState("en");
-  const [isDayMode, setIsDayMode] = useState(false);
+  const [lang, setLang]             = useState("en");
+  const [isDayMode, setIsDayMode]   = useState(false);
   const [activeWeek, setActiveWeek] = useState(0);
   const [activeDay, setActiveDay]   = useState(0);
   const [activeTab, setActiveTab]   = useState(0);
   const [babyMonth, setBabyMonth]   = useState(5);
   const [logData, setLogData]       = useState(loadStorage);
+
+  // ─── MailerLite universal script ────────────────────────────────────────────
+  useEffect(() => {
+    if (window.ml) return; // don't load twice
+    const script = document.createElement("script");
+    script.src = "https://assets.mailerlite.com/js/universal.js";
+    script.async = true;
+    script.onload = () => window.ml && window.ml("account", "2298067");
+    document.body.appendChild(script);
+    return () => document.body.removeChild(script);
+  }, []);
 
   const t      = T[lang];
   const weeks  = WEEKS_DATA[lang];
@@ -260,7 +265,6 @@ export default function SleepTracker() {
   const logKey     = `${activeWeek}-${activeDay}`;
   const entry      = logData[logKey] || {};
 
-  // Auto-save on any entry change
   const updateField = (field, val) => {
     const updated = { ...logData, [logKey]: { ...entry, [field]: val } };
     setLogData(updated);
@@ -320,9 +324,7 @@ export default function SleepTracker() {
 
         {/* Header */}
         <div style={{ textAlign:"center", marginBottom:"24px", position:"relative" }}>
-          {/* Controls row */}
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"16px" }}>
-            {/* Language toggle */}
             <div style={{ display:"flex", gap:"4px" }}>
               {["en","es"].map(l => (
                 <button key={l} onClick={() => setLang(l)} style={{
@@ -334,13 +336,9 @@ export default function SleepTracker() {
                 }}>{l.toUpperCase()}</button>
               ))}
             </div>
-
-            {/* Mama Remoto brand link */}
             <a href="https://mamaremoto.com/babysleeptracker" target="_blank" rel="noopener noreferrer" style={{ fontSize:"11px", color:theme.textMuted, textDecoration:"none", letterSpacing:"0.06em", opacity:0.8 }}>
               mamaremoto.com
             </a>
-
-            {/* Day/Night toggle */}
             <button onClick={() => setIsDayMode(!isDayMode)} style={{
               background: isDayMode ? "#fff8f0" : "rgba(255,255,255,0.1)",
               border: isDayMode ? "1px solid #e8d0b8" : "1px solid rgba(255,255,255,0.2)",
@@ -351,7 +349,6 @@ export default function SleepTracker() {
               {isDayMode ? `🌙 ${t.nightMode}` : `☀️ ${t.dayMode}`}
             </button>
           </div>
-
           <div style={{ fontSize:"44px", marginBottom:"4px", lineHeight:1 }}>{theme.icon}</div>
           <h1 style={{ fontSize:"24px", fontWeight:"400", letterSpacing:"0.04em", margin:"0 0 4px", fontStyle:"italic" }}>{t.appTitle}</h1>
           <p style={{ fontSize:"11px", color:theme.textMuted, margin:0, letterSpacing:"0.12em", textTransform:"uppercase" }}>{t.appSub}</p>
@@ -478,10 +475,10 @@ export default function SleepTracker() {
             </div>
 
             <div style={{ display:"flex", gap:"8px", marginBottom:"14px" }}>
-              {[{label:t.fields.wakeTime.replace("Wake-up ","").replace("Hora de d","D"), value:routine.wakeWindows},{label:t.naps||"Naps", value:routine.naps},{label:"Sleep", value:routine.totalSleep}].map((stat,i) => (
+              {[{label:"wake windows",value:routine.wakeWindows},{label:"naps",value:routine.naps},{label:"total sleep",value:routine.totalSleep}].map((stat,i) => (
                 <div key={i} style={{ flex:1, background:theme.bgCard, borderRadius:"12px", border:`1px solid ${theme.border}`, padding:"10px 6px", textAlign:"center", boxShadow:isDayMode?theme.shadow:"none" }}>
                   <div style={{ fontSize:"11px", color:weekColor, fontWeight:"700", marginBottom:"3px" }}>{stat.value}</div>
-                  <div style={{ fontSize:"9px", color:theme.textMuted, textTransform:"uppercase", letterSpacing:"0.06em", lineHeight:1.3 }}>{routine.wakeWindows===stat.value?"wake windows":routine.naps===stat.value?"naps":"total sleep"}</div>
+                  <div style={{ fontSize:"9px", color:theme.textMuted, textTransform:"uppercase", letterSpacing:"0.06em", lineHeight:1.3 }}>{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -527,17 +524,17 @@ export default function SleepTracker() {
           <div style={{ fontSize:"11px", color:theme.textMuted, marginTop:"8px" }}>{completedCount} of 21 {t.nightsLogged}</div>
         </div>
 
-{/* Mama Remoto promo */}
-<div style={{ background:isDayMode?"#fff8f2":"rgba(196,144,124,0.08)", border:`1px solid ${isDayMode?"#e8c8b0":"rgba(196,144,124,0.2)"}`, borderRadius:"16px", padding:"16px 18px", textAlign:"center" }}>
-  <div style={{ fontSize:"11px", color:theme.textMuted, marginBottom:"4px" }}>{t.freeTag} <strong style={{ color:"#C4907C" }}>Mamá Remoto</strong></div>
-  <div style={{ fontSize:"15px", fontFamily:"Georgia, serif", fontWeight:"600", color:"#C4907C", marginBottom:"4px" }}>
-    🌙 The Sleep Guide is coming
-  </div>
-  <div style={{ fontSize:"12px", color:theme.textMuted, marginBottom:"14px" }}>
-    Join the waitlist — early access + launch discount
-  </div>
-  <div className="ml-embedded" data-form="Nq1INH" />
-</div>
+        {/* Mama Remoto promo — embedded MailerLite form */}
+        <div style={{ background:isDayMode?"#fff8f2":"rgba(196,144,124,0.08)", border:`1px solid ${isDayMode?"#e8c8b0":"rgba(196,144,124,0.2)"}`, borderRadius:"16px", padding:"16px 18px", textAlign:"center" }}>
+          <div style={{ fontSize:"11px", color:theme.textMuted, marginBottom:"4px" }}>{t.freeTag} <strong style={{ color:"#C4907C" }}>Mamá Remoto</strong></div>
+          <div style={{ fontSize:"15px", fontFamily:"Georgia, serif", fontWeight:"600", color:"#C4907C", marginBottom:"4px" }}>
+            🌙 The Sleep Guide is coming
+          </div>
+          <div style={{ fontSize:"12px", color:theme.textMuted, marginBottom:"14px" }}>
+            Join the waitlist — early access + launch discount
+          </div>
+          <div className="ml-embedded" data-form="Nq1INH" />
+        </div>
 
       </div>
     </div>
